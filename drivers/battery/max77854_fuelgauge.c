@@ -1468,6 +1468,9 @@ static int max77854_fg_get_property(struct power_supply *psy,
 	u8 data[2] = {0, 0};
 
 	switch (psp) {
+	case POWER_SUPPLY_PROP_STATUS:
+		val->intval = 0;
+		break;
 		/* Cell voltage (VCELL, mV) */
 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
 		val->intval = max77854_get_fuelgauge_value(fuelgauge, FG_VOLTAGE);
@@ -1651,10 +1654,10 @@ static int max77854_fg_get_property(struct power_supply *psy,
 		val->intval = max77854_get_fuelgauge_value(fuelgauge,
 							   FG_TEMPERATURE);
 		break;
-#if defined(CONFIG_EN_OOPS)
 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
 		return -ENODATA;
-#endif
+	case POWER_SUPPLY_PROP_CHARGE_FULL:
+		return -ENODATA;
 	case POWER_SUPPLY_PROP_ENERGY_FULL:
 		{
 			int fullcap = max77854_get_fuelgauge_value(fuelgauge, FG_FULLCAPNOM);
